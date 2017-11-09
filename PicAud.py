@@ -1,41 +1,38 @@
 import numpy as np
 import pyaudio
 import math
-import midiutil
 from scipy import signal
 
-
-count = 0
+# Get array of notes (C-1 to G9 Equal temperament)
 Notes = np.load("Notes.npy")
 
 
+# Called by CVAudio, takes in picture as array and uses pixel data to create waveforms
 def picToAud(array):
-    wave_data = ''
     p = pyaudio.PyAudio()
-
     stream = p.open(format=pyaudio.paInt16, channels=1, rate=92000, output=True)
 
     for x in array:
         for y in x:
-            r = getFreq((y[2] % 64) + 10)
+            # The red value of the pixel is used to control the frequency, the green controls the length, and the blue
+            # is used to control the volume of the note
+            r = getFreq((y[2] % 64))
             g = np.linspace(0, y[1] / 128, 92000, endpoint=False)
-
             b = (y[0] / 3)
+            # Note: openCV returns pixel data in the order of blue green red
 
+            # Generate wave
             wave_data = signal.square(2 * math.pi * r * g) * b
-            print(wave_data)
 
-
+            # Write to pyaudio stream
             stream.write(wave_data.astype(np.int8))
+
+    # Cleanup
     stream.stop_stream()
     stream.close()
     p.terminate()
 
 
-
-
-
+# Function that gets frequency value from array of frequencies, index of frequency is corresponding midi note
 def getFreq(num):
-    global Notes
-    print(Notes[num])
     return Notes[num]
