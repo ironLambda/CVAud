@@ -1,6 +1,0 @@
-global count
-    for x in range(int(44100 * float(len))):
-        wave_data = wave_data + chr(int(math.sin(2*math.pi*freq*x/44100) * vol) + 128)
-
-    count += 1
-    return wave_data
