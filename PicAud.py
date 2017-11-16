@@ -36,3 +36,16 @@ def picToAud(array):
 # Function that gets frequency value from array of frequencies, index of frequency is corresponding midi note
 def getFreq(num):
     return Notes[num]
+
+def noteTest(frequency):
+	l = np.linspace(0, 2, 384000, endpoint=False)
+	p = pyaudio.PyAudio()
+	stream = p.open(format=pyaudio.paInt16, channels=1, rate=192000, output=True)
+	wave_data = signal.square(2 * math.pi * frequency * l)
+	stream.write(wave_data)
+
+def playNotes():
+	if __name__ == "__main__":
+		multiprocessing.Process(target = noteTest, args = [523.25]).start()
+		multiprocessing.Process(target = noteTest, args = [659.25]).start()
+		multiprocessing.Process(target = noteTest, args = [783.99]).start()
