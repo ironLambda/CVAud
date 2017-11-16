@@ -46,6 +46,6 @@ def noteTest(frequency):
 
 def playNotes():
 	if __name__ == "__main__":
-		multiprocessing.Process(target = noteTest, args = [523.25]).start()
-		multiprocessing.Process(target = noteTest, args = [659.25]).start()
-		multiprocessing.Process(target = noteTest, args = [783.99]).start()
+		multiprocessing.Process(target = noteTest, args = [523.25113060119]).start()
+		multiprocessing.Process(target = noteTest, args = [659.25511382575]).start()
+		multiprocessing.Process(target = noteTest, args = [783.99087196355]).start()
