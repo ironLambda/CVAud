@@ -1,3 +1,6 @@
+#Code that deals with image manipulation and waveform generation. 
+#Ryan, Ben, William
+
 import numpy as np
 import pyaudio
 import math
@@ -34,7 +37,7 @@ def picToAud(array):
 
     
 
-
+# Wave generation with shorter waveforms
 def genWaveRealtime(arr):
     v = 12
     n = Notes[int((arr[1]/640) * 128)]
@@ -42,6 +45,7 @@ def genWaveRealtime(arr):
     note = signal.square(2 * math.pi * n * CONLEN2)*v
     return note.astype(np.int16)
 
+#main function that takes in values and makes waves
 def genWave(arr):
         r = 0
         b = 0
@@ -54,7 +58,8 @@ def genWave(arr):
 
         
         return wave_data.astype(np.int16)
-    
+
+#used by the thread to keep a buffer to play. Threading is needed due to the pi audio drivers breaking when input is lost. 
 def genWaveProc(ar1, ar2, ar3):
     global waves
     start = 0

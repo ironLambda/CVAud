@@ -1,3 +1,6 @@
+#Main file, code for motion tracking
+#Ryan, Ben, William
+
 from collections import deque
 import numpy as np
 import argparse
@@ -11,7 +14,7 @@ import pyaudio
 from threading import Thread
 from queue import Queue 
 
-# construct the argument parse and parse the arguments
+# construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video",
                 help="path to the (optional) video file")
@@ -27,22 +30,10 @@ greenUpper = (42, 255, 255)
 # Set up variables
 pts = deque(maxlen=args["buffer"])
 counter = 0
+#set up pyaudio
 pyaud = pyaudio.PyAudio()
 stream = pyaud.open(format=pyaudio.paInt16, channels=1, rate=4000, output=True)
-waves = Queue()
 
-
-def playthread(waves):
-    
-    for wave in iter(waves.get, None):
-        
-        print(wave)
-        stream.write(wave.astype(np.int8))
-        
-    
-        
-thread = Thread( target=playthread, args=(waves,))
-thread.start()
 
 # run image program if flag used
 if args.get("image", False):
@@ -95,7 +86,7 @@ for rawim in camera.capture_continuous(raw, format="bgr", use_video_port = True)
             cv2.circle(frame, center, 5, (0, 0, 255), -1)
             pts.appendleft(center)
 
-    # figure out movement direction
+    # generate wave from center point
     wave = p.genWaveRealtime([v, n])
     stream.write(wave.astype(np.int8))
     
